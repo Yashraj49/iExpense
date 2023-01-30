@@ -1,0 +1,83 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+First, we need to decide what an expense is – what do we want it to store? In this instance it will be three things: the name of the item, whether it’s business or personal, and its cost as a Double.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Remember, using @StateObject here asks SwiftUI to watch the object for any change announcements, so any time one of our @Published properties changes the view will refresh its body. It’s only used when creating a class instance – all other times you ‘ll use @ObservedObject instead.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Now, remember: when we say id: \.name we’re saying we can identify each item uniquely by its name, which isn’t true here – we have the same name multiple times, and we can’t guarantee our expenses will be unique either.
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+In our current code, we have this:
+
+ForEach(expenses.items, id: \.name) { item in
+    Text(item.name)
+}
+.onDelete(perform: removeItems)
+
+In English, that means “create a new row for every item in the expense items, identified uniquely by its name, showing that name in the row, and calling the removeItems() method to delete it.”
+
+
+This is a logic error on our behalf: our code is fine, and it doesn’t crash at runtime, but we’ve applied the wrong logic to get to that end result – we’ve told SwiftUI that something will be a unique identifier, when it isn’t unique at all.
+
+To fix this we need to think more about our ExpenseItem struct. Right now it has three properties: name, type, and amount. The name by itself might be unique in practice, but it’s also likely not to be – as soon as the user enters “Lunch” twice we’ll start hitting problems. We could perhaps try to combine the name, type and amount into a new computed property, but even then we’re just delaying the inevitable; it’s still not really unique.
+
+The smart solution here is to add something to ExpenseItem that is unique, such as an ID number that we assign by hand. That would work, but it does mean tracking the last number we assigned so we don’t use duplicates there either.
+
+There is in fact an easier solution, and it’s called UUID – short for “universally unique identifier”, and if that doesn’t sound unique I’m not sure what does.
+
+UUIDs are long hexadecimal strings such as this one: 08B15DB4-2F02-4AB8-A965-67A9C90D8A44. So, that’s eight digits, four digits, four digits, four digits, then twelve digits, of which the only requirement is that there’s a 4 in the first number of the third block. If we subtract the fixed 4, we end up with 31 digits, each of which can be one of 16 values – if we generated 1 UUID every second for a billion years, we might begin to have the slightest chance of generating a duplicate.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+All we’ve done is add Identifiable to the list of protocol conformances, nothing more. This is one of the protocols built into Swift, and means “this type can be identified uniquely.” It has only one requirement, which is that there must be a property called id that contains a unique identifier. We just added that, so we don’t need to do any extra work – our type conforms to Identifiable just fine.
+
+Now, you might wonder why we added that, because our code was working fine before. Well, because our expense items are now guaranteed to be identifiable uniquely, we no longer need to tell ForEach which property to use for the identifier – it knows there will be an id property and that it will be unique, because that’s the point of the Identifiable protocol.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+JSONEncoder().encode() means “create an encoder and use it to encode something,” all in one step, rather than creating the encoder first then using it later.
+
+Now, if you’re following along you’ll notice that code doesn’t actually compile. And if you’re following along closely you’ll have noticed that I said this process takes four steps while only listing three.
+
+The problem is that the encode() method can only archive objects that conform to the Codable protocol. Remember, conforming to Codable is what asks the compiler to generate code for us able to handle archiving and unarchiving objects, and if we don’t add a conformance for that then our code won’t build.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Swift already includes Codable conformances for the UUID, String, and Int properties of ExpenseItem, and so it’s able to make ExpenseItem conform automatically as soon as we ask for it.
+
+However, you will see a warning that id will not be decoded because we made it a constant and assigned a default value. This is actually the behavior we want, but Swift is trying to be helpful because it’s possible you did plan to decode this value from JSON. 
+
+warning can be as shown below
+
+" Immutable property will not be decoded because it is declared with an initial value which cannot be overwritten "
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Attempt to read the “Items” key from UserDefaults.
+Create an instance of JSONDecoder, which is the counterpart of JSONEncoder that lets us go from JSON data to Swift objects.
+Ask the decoder to convert the data we received from UserDefaults into an array of ExpenseItem objects.
+If that worked, assign the resulting array to items and exit.
+Otherwise, set items to be an empty array.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+The two key parts of that code are the data(forKey: "Items") line, which attempts to read whatever is in “Items” as a Data object, and try? JSONDecoder().decode([ExpenseItem].self, from: savedItems), which does the actual job of unarchiving the Data object into an array of ExpenseItem objects.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+It’s common to do a bit of a double take when you first see [ExpenseItem].self – what does the .self mean? Well, if we had just used [ExpenseItem], Swift would want to know what we meant – are we trying to make a copy of the class? Were we planning to reference a static property or method? Did we perhaps mean to create an instance of the class? To avoid confusion – to say that we mean we’re referring to the type itself, known as the type object – we write .self after it.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
