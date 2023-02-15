@@ -5,7 +5,7 @@
 //  Created by Yashraj jadhav on 27/01/23.
 //
 
-truct AddView: View {
+struct AddView: View {
     @State private var name = ""
     @State private var type = "Personal"
     @State private var amount = 0.0
