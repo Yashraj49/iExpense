@@ -24,29 +24,41 @@ struct AddView: View {
     var body: some View {
         NavigationView {
             Form {
-                TextField("Name", text: $name)
-
-                Picker("Type", selection: $type) {
-                    ForEach(types, id: \.self) {
-                        Text($0)
+                Section(header: Text("Expense Details")) {
+                    TextField("Name", text: $name)
+                    
+                    Picker("Type", selection: $type) {
+                        ForEach(types, id: \.self) {
+                            Text($0)
+                        }
                     }
                 }
-
-                TextField("Amount", value: $amount, format: .currency(code: Locale.current.currencyCode ?? "USD"))
                 
-                    .keyboardType(.decimalPad)
+                Section(header: Text("Amount")) {
+                    TextField("Amount", value: $amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                        .keyboardType(.decimalPad)
+                }
             }
-            .navigationTitle("Add new expense")
+            .navigationTitle("Add New Expense")
             .toolbar {
-                Button("Save") {
-                    let item = ExpenseItem(name: name, type: type, amount: amount)
-                    expenses.items.append(item)
-                    dismiss()
-                    
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        let item = ExpenseItem(name: name, type: type, amount: amount)
+                        expenses.items.append(item)
+                        dismiss()
+                    }
                 }
             }
         }
+        .accentColor(.blue)
+        .navigationBarTitleDisplayMode(.inline) // Show navigation title in line with the back button
     }
+
 }
 
 

@@ -57,6 +57,7 @@ struct ContentView: View {
             }
         }
     }
+  
     func removeItems(at offsets : IndexSet)
     {
         expenses.items.remove(atOffsets: offsets)
