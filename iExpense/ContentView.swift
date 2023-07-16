@@ -11,9 +11,10 @@ struct ContentView: View {
     @State private var showingAddExpense = false
     @StateObject var expenses = Expenses()
     @State private var animateOpacity = false
+   
     
     var body: some View {
-        NavigationView {
+        NavigationView{
             List {
                 ForEach(expenses.items) { item in
                     HStack {
@@ -33,29 +34,33 @@ struct ContentView: View {
                 .onDelete(perform: removeItems)
             }
             .listStyle(InsetGroupedListStyle())
-            .navigationTitle("iExpense")
-            .navigationBarTitleDisplayMode(.large)
-            .navigationBarItems(
-                leading: EditButton(),
-                trailing: Button(action: { self.showingAddExpense = true }) {
-                    
-                }
-            )
+            
+            .navigationBarTitleDisplayMode(.automatic)
+            
             .background(Color(.systemGroupedBackground))
             .animation(.default)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .bottomBar) {
                     Button(action: { self.showingAddExpense = true }) {
                         Image(systemName: "plus")
                             
                           
                     }
                 }
+                
+                ToolbarItem(placement: .bottomBar) {
+                    Button(action: {self.showingAddExpense = true}) {
+                        EditButton()
+                    }
+                }
+                
+                
             }
             .sheet(isPresented: $showingAddExpense) {
                 AddView(expenses: expenses)
             }
         }
+        
     }
   
     func removeItems(at offsets: IndexSet) {

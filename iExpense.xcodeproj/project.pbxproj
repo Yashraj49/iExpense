@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E50C7A382A61D4B800852C8A /* WelcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50C7A372A61D4B800852C8A /* WelcView.swift */; };
 		E56EFB9A2983B294000F7095 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56EFB992983B294000F7095 /* AddView.swift */; };
 		E5B61162297E5A3900A9633E /* File1 in Resources */ = {isa = PBXBuildFile; fileRef = E5B61161297E5A3900A9633E /* File1 */; };
 		E5B61164297E649400A9633E /* Expenseitem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B61163297E649400A9633E /* Expenseitem.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E50C7A372A61D4B800852C8A /* WelcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcView.swift; sourceTree = "<group>"; };
 		E56EFB992983B294000F7095 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		E5B61161297E5A3900A9633E /* File1 */ = {isa = PBXFileReference; lastKnownFileType = text; path = File1; sourceTree = "<group>"; };
 		E5B61163297E649400A9633E /* Expenseitem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expenseitem.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 			children = (
 				E5C8403A2979143E00C51F87 /* iExpenseApp.swift */,
 				E5C8403C2979143E00C51F87 /* ContentView.swift */,
+				E50C7A372A61D4B800852C8A /* WelcView.swift */,
 				E56EFB992983B294000F7095 /* AddView.swift */,
 				E5B61163297E649400A9633E /* Expenseitem.swift */,
 				E5B61165297E64E700A9633E /* Expenses.swift */,
@@ -155,6 +158,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5B61166297E64E700A9633E /* Expenses.swift in Sources */,
+				E50C7A382A61D4B800852C8A /* WelcView.swift in Sources */,
 				E5B61164297E649400A9633E /* Expenseitem.swift in Sources */,
 				E56EFB9A2983B294000F7095 /* AddView.swift in Sources */,
 				E5C8403D2979143E00C51F87 /* ContentView.swift in Sources */,
